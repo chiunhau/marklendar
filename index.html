@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="simplegrid.css">	
+	<link rel="SHORTCUT ICON" href="favicon.ico"/>
+	<script type="text/javascript" src="jquery.js"></script>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>Marklendar</title>
+	<style type="text/css">
+	.content{
+		font-family: Helvetica;
+		background-color: white;
+		border-radius: 30%;
+		font-size: 1.4em;
+		color:orange;
+		text-align: center;
+	}
+	body{
+		font-family: Helvetica;
+		margin-top: 5%;
+	}
+	.content div{
+		position: relative;
+  		top: 15%;
+    }
+    .navbar, .week{
+   		font-family: Helvetica;
+    	color:orange;
+   		text-align: center;
+   	}
+   	#date{
+
+   	}
+    #next, #prev{
+    	font-family: Helvetica;
+    	border-radius: 20px;
+   		color:orange;
+   		border-color: orange;
+   		border-style: solid ;
+		border-width: 1px;
+		text-align: center;
+		font-size: 1em;
+		
+	}	
+	.reset {
+		font-family: Helvetica;
+    	border-radius: 20px;
+    	border-width: 1px;
+   		color:white;
+   		border-style: solid ;
+   		background-color: rgb(251,78,91);
+   		text-align: center;
+		font-size: 1em;
+		
+	}
+	.about{
+		font-family: Helvetica;
+    	border-radius: 20px;
+    	border-width: 1px;
+   		color:white;
+   		border-style: solid ;
+   		background-color: rgb(108,195,155);
+   		text-align: center;
+		font-size: 1em;
+	}
+	.theme {
+		font-family: Helvetica;
+    	border-radius: 20px;
+   		color:white;
+   		background-color: orange;
+   		text-align: center;
+		font-size: 1em;
+		border-style: solid ;
+		border-width: 1px;
+
+	}
+
+	</style>
+</head>
+
+<body>
+	
+	<script>
+	
+	var now = new Date();
+	var global_themeColor='orange';
+	$(function(){
+		
+		
+		initialize(now,'orange');
+
+		function initialize(date,themeColor){
+			date.setDate(1);
+			var l;
+			var day=date.getDay();
+
+			var month=date.getMonth();//0~11
+			var year=date.getFullYear();//4 digits
+			var leap=year%400==0||(year%4==0&&year%100!=0);
+			if(month==0||month==2||month==4||month==6||month==7||month==9||month==11){
+				l=31;
+			}
+			else{
+				l=30;
+			}
+			
+			if(leap&&month==1){
+				l=29;
+			}
+			else if(month==1&&!leap){
+				l=28;
+			}
+			for(var i=0;i<42;i++){
+				var str1='span'.concat(i+1);
+				var id='#'.concat(str1);
+				var m=$(id).css('border','white solid 1px');
+				var n=$(id).css('background-color','white');
+				var o=$(id).html('');
+			}
+			//alert(date);
+			var ddd=new Date();
+			var today=ddd.getDate();
+			
+			for(var i=0;i<l;i++){
+				
+				var str1='span'.concat(i+day+1);
+				var id='#'.concat(str1);
+				var m1=$(id).css('border-style','solid');
+				var m2=$(id).css('border-color',themeColor);
+				var m3=$(id).css('border-width','1px');
+				var m4=$(id).css('border-radius','30%');
+
+
+				var n=$(id).css('background-color','white');
+				
+				var str2='<div>'.concat(i+1).concat('</div>');
+				var o=$(id).html(str2);
+				var p=$(id).css('color',themeColor);
+				var tem_date=new Date();
+
+				if(today===i+1&&month===tem_date.getMonth()){
+					var u=$(id).css('border-radius','100px');
+				}
+
+				var str3=year.toString().concat('-');
+				var str4;
+				if (month+1<10) {
+					str4=str3.concat('0').concat((month+1).toString()).concat('-');
+				}
+				else{
+					str4=str3.concat((month+1).toString()).concat('-');
+
+				}
+
+				var str5;
+				if (i+1<10) 
+				{
+					str5=str4.concat('0').concat((i+1).toString());
+				}
+				else{
+					str5=str4.concat((i+1).toString());
+				}
+				
+				var j=localStorage.getItem(str5);
+				
+				if(j==='1'){
+						var pp=$(id).css('color','white');
+						var nn=$(id).css('background-color',themeColor);
+				}
+
+			}
+			/*var tem= new Date();
+			tem=date;
+			
+			alert(tem.toJSON().slice(0,10));
+			alert(l);
+			for (var i = 0; i<l; i++) {
+				tem.setDate(i+1);
+				alert(tem);
+				
+			};*/
+			
+			$('.content').css('height',$('.content').width());
+			var str1=month+1;
+			var p=str1.toString().concat('月');
+			var q=p.concat(year.toString());
+			$('#date_h4').html(q);
+		};	
+			
+			
+			$('#next').click(function(){
+				now.setMonth(now.getMonth()+1);
+				initialize(now, global_themeColor);
+				
+			});
+			$('#prev').click(function(){
+				now.setMonth(now.getMonth()-1);
+				initialize(now, global_themeColor);
+				
+			});
+			$('.reset').click(function(){
+				localStorage.clear();
+				initialize(now, global_themeColor);
+
+			});
+			$('.about').click(function(){
+				window.open("https://www.facebook.com/chiunhauyou");
+
+			});
+			$('.theme').click(function(){
+				
+				switch($(this).css('background-color')){
+					case 'rgb(255, 165, 0)': 
+						$(this).css('background-color','rgb(108, 195, 155)');
+						global_themeColor='rgb(108, 195, 155)';
+						initialize(now,'rgb(108, 195, 155)');
+						$('.navbar,.week').css("color","rgb(108,195,155)");
+						$('#next,#prev').css({"color":"rgb(108,195,155)","border-color":"rgb(108,195,155)"});
+						break;
+
+					case 'rgb(108, 195, 155)': 
+						$(this).css('background-color','rgb(251, 78, 91)');
+						global_themeColor='rgb(251, 78, 91)';
+						initialize(now,'rgb(251, 78, 91)');
+						$('.navbar,.week').css("color","rgb(251,78,91)");
+						$('#next,#prev').css({"color":"rgb(251,78,91)","border-color":"rgb(251,78,91)"});
+						break;	
+
+					case 'rgb(251, 78, 91)': 
+						$(this).css('background-color','rgb(255, 165, 0)');
+						global_themeColor='rgb(255, 165, 0)';
+						initialize(now,'rgb(255, 165, 0)');
+						$('.navbar,.week').css("color","rgb(255,165,0)");
+						$('#next,#prev').css({"color":"rgb(255,165,0)","border-color":"rgb(255,165,0)"});
+						break;
+				}
+				
+				
+				
+
+
+			});
+
+
+		
+	});
+
+		function span_click(id){
+			var span=document.getElementById(id);
+			var d= new Date();
+			d=now;
+			
+			
+			d.setDate(parseInt(span.firstChild.innerHTML));
+			
+			var j=d.toJSON();
+			j=j.slice(0,10);
+			
+			if(span.style.backgroundColor==global_themeColor){
+				span.style.backgroundColor="white";
+				span.style.color=global_themeColor;
+				localStorage.setItem(j,0);
+				//alert(localStorage.getItem(j));
+			} 
+			else if(span.style.backgroundColor=="white"){
+				span.style.backgroundColor=global_themeColor;
+				span.style.color="white";
+				localStorage.setItem(j,1);
+				//alert(localStorage.getItem(j));
+				
+			} 
+ 		}
+
+
+
+
+		
+
+
+
+		
+
+	</script>
+<div class="grid grid-pad navbar">
+	<div class="mobile-col-1-4" id="prev">
+		<p>Prev.</p>
+	</div>
+	<div class="mobile-col-1-2" id="day_month_year" >
+		<h3 id="date_h4"></h3>
+	</div>
+	<div class="mobile-col-1-4" id="next" style="">
+		<p>Next</p>		
+	</div>
+</div>
+<div class="grid grid-pad">
+	<div class="mobile-col-1-7">
+		<div class="week">
+			Sun.
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="week">
+			Mon.
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="week">
+			Tue.
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="week">
+			Wed.
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="week">
+			Thu.
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="week">
+			Fri.
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="week">
+			Sat.
+		</div>
+	</div>
+	
+</div>
+<div class="grid grid-pad">
+	<div class="mobile-col-1-7">
+		<div class="content" id="span1" onclick="span_click('span1')">
+			
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span2" onclick="span_click('span2')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span3" onclick="span_click('span3')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span4" onclick="span_click('span4')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span5" onclick="span_click('span5')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span6" onclick="span_click('span6')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span7" onclick="span_click('span7')">
+		</div>
+	</div>
+	
+</div>
+
+<div class="grid grid-pad">
+	<div class="mobile-col-1-7">
+		<div class="content" id="span8" onclick="span_click('span8')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span9" onclick="span_click('span9')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span10" onclick="span_click('span10')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span11" onclick="span_click('span11')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span12" onclick="span_click('span12')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span13" onclick="span_click('span13')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span14" onclick="span_click('span14')">
+		</div>
+	</div>
+	
+</div>
+
+<div class="grid grid-pad">
+	<div class="mobile-col-1-7">
+		<div class="content" id="span15" onclick="span_click('span15')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span16" onclick="span_click('span16')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span17" onclick="span_click('span17')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span18" onclick="span_click('span18')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span19" onclick="span_click('span19')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span20" onclick="span_click('span20')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span21" onclick="span_click('span21')">
+		</div>
+	</div>
+	
+</div>
+
+<div class="grid grid-pad">
+	<div class="mobile-col-1-7">
+		<div class="content" id="span22" onclick="span_click('span22')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span23" onclick="span_click('span23')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span24" onclick="span_click('span24')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span25" onclick="span_click('span25')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span26" onclick="span_click('span26')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span27" onclick="span_click('span27')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span28" onclick="span_click('span28')">
+		</div>
+	</div>
+	
+</div>
+
+<div class="grid grid-pad">
+	<div class="mobile-col-1-7">
+		<div class="content" id="span29" onclick="span_click('span29')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span30" onclick="span_click('span30')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span31" onclick="span_click('span31')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span32" onclick="span_click('span32')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span33" onclick="span_click('span33')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span34" onclick="span_click('span34')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span35" onclick="span_click('span35')">
+		</div>
+	</div>
+	
+</div>
+
+<div class="grid grid-pad">
+	<div class="mobile-col-1-7">
+		<div class="content" id="span36" onclick="span_click('span36')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span37" onclick="span_click('span37')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span38" onclick="span_click('span38')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span39" onclick="span_click('span39')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span40" onclick="span_click('span40')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span41" onclick="span_click('span41')">
+		</div>
+	</div>
+	<div class="mobile-col-1-7">
+		<div class="content" id="span42" onclick="span_click('span42')">
+		</div>
+	</div>
+	
+</div>
+<div class="grid grid-pad">
+	
+	<div class="mobile-col-1-3 push-1-3">
+		<div class="theme">
+			<p>Theme</p>
+		</div>
+	</div>
+	<div class="mobile-col-1-3 push-1-3">
+		<div class="reset">
+			<p>Reset</p>
+		</div>
+	</div>
+	<div class="mobile-col-1-3 push-1-3">
+		<div class="about">
+			<p>About</p>
+		</div>
+	</div>
+	
+	
+</div>
+<div class="grid grid-pad" style="text-align:center;color:#BEBEBE;">
+	<small >©Copyright 2014 Marklendar</small>
+</div>
+<!--
+</body>
+</html>
+
